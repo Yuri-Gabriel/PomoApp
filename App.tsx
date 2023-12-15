@@ -1,20 +1,68 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+/* eslint-disable prettier/prettier */
+import React from "react";
 
-export default function App() {
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import SetTimer from "./Screens/SetTimer";
+import Contador from "./Screens/Contador";
+import StartScreen from "./Screens/StartScreen";
+import Colors from "./Screens/Colors";
+import Profile from "./Screens/Profile";
+
+import { RootStackParamList } from './Screens/types';
+
+
+//npx expo start
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="StartScreen">
+        <Stack.Screen
+          name="StartScreen"
+          component={StartScreen}
+          options={
+            {
+              headerShown: false
+            }
+          }
+        />
+        <Stack.Screen
+          name="SetTimer"
+          component={SetTimer}
+          options={
+            {
+              headerShown: false
+            }
+          }
+        />
+        <Stack.Screen
+          name="Contador"
+          component={Contador}
+          options={{
+            title: '',
+            headerStyle: {
+              backgroundColor: Colors.Azul_Claro,
+            },
+            headerTintColor: '#FFFFFF'
+          }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            headerStyle: {
+              backgroundColor: Colors.Azul_Claro,
+            },
+            headerTintColor: '#FFFFFF'
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
