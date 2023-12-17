@@ -37,7 +37,10 @@ export interface SetTimerState {
     numberOfSessions: number,
     pauseTime: number,
     promptShow: boolean,
-    pressetName: string
+    pressetName: string,
+    workTimePresset: string,
+    numberOfSessiosPresset: string,
+    pauseTimePresset: string
 };
 
 export interface ProfileProps {

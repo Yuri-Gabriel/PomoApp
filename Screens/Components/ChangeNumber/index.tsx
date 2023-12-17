@@ -12,7 +12,6 @@ import {
     NumberContainer,
     NumberLabel
 } from './style';
-import {View, Text} from 'react-native'
 
 const ChangeNumber = ({title, value, setValue}: any) => {
 

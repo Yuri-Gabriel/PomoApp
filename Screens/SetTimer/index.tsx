@@ -12,6 +12,10 @@ import {
     SavePressetButton,
     SavePressetImage,
     Container,
+    
+} from './style';
+
+import { 
     PromptMainContainer,
     PromptContainer,
     CloseButton,
@@ -22,7 +26,7 @@ import {
     PromptFormChanger,
     PromptFormChangerContainer,
     PromptButtonsContainer
-} from './style';
+} from '../Components/Form/style';
 
 import ChangeNumber from "../Components/ChangeNumber";
 
@@ -50,7 +54,10 @@ class SetTimer extends React.Component<SetTimerProps, SetTimerState> {
             numberOfSessions: 5,
             pauseTime: 3,
             promptShow: false,
-            pressetName: ""
+            pressetName: "",
+            workTimePresset: "25",
+            pauseTimePresset: "3",
+            numberOfSessiosPresset: "5"
         }
         
     }
@@ -58,6 +65,7 @@ class SetTimer extends React.Component<SetTimerProps, SetTimerState> {
     setWorkTime(value: number) {
         if(value > 0 && value < 100) {
             this.setState({ workTime: value });
+            this.setState({ workTimePresset: `${value}` });
         }
         
     }
@@ -65,30 +73,55 @@ class SetTimer extends React.Component<SetTimerProps, SetTimerState> {
     setNumberOfSessions(value: number) {
         if(value > 0 && value < 100) {
             this.setState({ numberOfSessions: value });
+            this.setState({ numberOfSessiosPresset: `${value}` });
         }
     }
 
     setPauseTime(value: number) {
         if(value > 0 && value < 100) {
             this.setState({ pauseTime: value });
+            this.setState({ pauseTimePresset: `${value}` });
         }
+    }
+    
+    SavePresset() {
+        if (this.state.numberOfSessiosPresset == "" ||
+            this.state.pauseTimePresset == "" ||
+            this.state.workTimePresset == "" ||
+            this.state.pressetName == "") {
+                alert("Erro");
+                this.setState({ promptShow: false });
+        }
+        /**
+         * Pegar o nome do presset, tempo de trabalho, de descanço e n° de sessões 
+         * Enviar para a API
+        */
+    }
+
+    private CheckNumbersPresset(value: number): number {
+        if (value >= 100) {
+            value = 99;
+        } else if (value <= 0) {
+            value = 1;
+        }
+        return value;
     }
 
     render() {
         return (
             <MainContainer>
                 <Header onPress={() => {
-                    this.props.navigation.navigate("Profile", {
-                        username: this.username,
-                        email: this.email,
-                        iconUser: this.iconUser
-                    });
-                }}>
-                <IconUser source={require('../../Assets/userIcon.png')}/>
-                <Title>
-                    {this.username}
-                </Title>
-            </Header>
+                        this.props.navigation.navigate("Profile", {
+                            username: this.username,
+                            email: this.email,
+                            iconUser: this.iconUser
+                        });
+                    }}>
+                    <IconUser source={require('../../Assets/userIcon.png')}/>
+                    <Title>
+                        {this.username}
+                    </Title>
+                </Header>
             <ChangeNumberContainer>
                 <ChangeNumber
                     title="Trabalho"
@@ -129,10 +162,16 @@ class SetTimer extends React.Component<SetTimerProps, SetTimerState> {
                 <PromptMainContainer>
                     <PromptContainer>
                         <PromptButtonsContainer>
-                            <CloseButton onPress={() => { this.setState({ promptShow: false })}}>
+                            <CloseButton onPress={() =>  this.setState({ promptShow: false })}>
                                 <CloseButtonImage source={require("../../Assets/close-line.png")} />
                             </CloseButton>
-                            <SubmitButton onPress={() => {}}>
+                            <SubmitButton onPress={() => {
+                                
+                                this.SavePresset();
+                                this.setState({
+                                    promptShow: false
+                                });
+                            }}>
                                 <SubmitButtonText>
                                     Salvar
                                 </SubmitButtonText>
@@ -150,18 +189,39 @@ class SetTimer extends React.Component<SetTimerProps, SetTimerState> {
                             </PromptFormMenssage>
                             <PromptFormChangerContainer>
                                 <PromptFormChanger
-                                    value={`${this.state.workTime}`}
-                                    onChangeText={value => this.setWorkTime(parseInt(value))}
+                                    value={`${this.state.workTimePresset}`}
+                                    onChangeText={value => {
+                                        if (value != "") {
+                                            value = `${this.CheckNumbersPresset(parseInt(value))}`
+                                        }
+                                        this.setState({
+                                            workTimePresset: value
+                                        })
+                                    }}
                                     keyboardType="numeric"
                                 />
                                 <PromptFormChanger
-                                    value={`${this.state.numberOfSessions}`}
-                                    onChangeText={value => this.setNumberOfSessions(parseInt(value))}
+                                    value={`${this.state.numberOfSessiosPresset}`}
+                                    onChangeText={value => {
+                                        if (value != "") {
+                                            value = `${this.CheckNumbersPresset(parseInt(value))}`
+                                        }
+                                        this.setState({
+                                            numberOfSessiosPresset: value
+                                        })
+                                    }}
                                     keyboardType="numeric"
                                 />
                                 <PromptFormChanger
-                                    value={`${this.state.pauseTime}`}
-                                    onChangeText={value => this.setPauseTime(parseInt(value))}
+                                    value={`${this.state.pauseTimePresset}`}
+                                    onChangeText={value => {
+                                        if (value != "") {
+                                            value = `${this.CheckNumbersPresset(parseInt(value))}`
+                                        }
+                                        this.setState({
+                                            pauseTimePresset: value
+                                        });
+                                    }}
                                     keyboardType="numeric"
                                 />
                             </PromptFormChangerContainer>

@@ -14,10 +14,22 @@ import {
     ButtonSubmitText,
     IsLoginLabel,
     SwitchIsLoginButton,
+    ResetPasswordButton,
+    ResetPasswordButtonText
 } from './style';
 
-import UsersDB from '../../Api/Users.json';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { 
+    PromptMainContainer,
+    PromptContainer,
+    CloseButton,
+    CloseButtonImage,
+    PromptFormContainer,
+    PromptFormInputName,
+    PromptFormMenssage,
+    PromptButtonsContainer,
+    SubmitButton,
+    SubmitButtonText
+} from '../Components/Form/style';
 
 
 const StartScreen = ({navigation}: any) =>  {
@@ -26,15 +38,15 @@ const StartScreen = ({navigation}: any) =>  {
     const [password, setPassword] = useState<string>("");
     const [username, setUsername] = useState<string>("Yuri");
 
+    const [newPassword, setNewPassword] = useState<string>("");
+
     const iconUser = '../../Assets/userIcon.png';
 
     const [isLogin, setIsLogin] = useState<boolean>(false);
+    const [resetPassword, setResetPassword] = useState<boolean>(false);
 
     const CheckLogin = () => {
         if(true) {
-            async () => {
-                await AsyncStorage.setItem("username", username);
-            }
             navigation.reset({
                 routes: [{
                     name: 'SetTimer',
@@ -46,6 +58,12 @@ const StartScreen = ({navigation}: any) =>  {
                 }],
             });
         }
+    }
+
+    const ResetPassword = () => {
+        /**
+         * Enviar nova senha para a API
+        */
     }
 
     return (
@@ -92,6 +110,13 @@ const StartScreen = ({navigation}: any) =>  {
                             {isLogin?"Entrar":"Criar conta"}
                         </ButtonSubmitText>
                     </ButtonSubmit>
+                    {isLogin &&
+                        <ResetPasswordButton onPress={() => setResetPassword(true) }>
+                            <ResetPasswordButtonText>
+                                Redefinir senha
+                            </ResetPasswordButtonText>
+                        </ResetPasswordButton>
+                    }
                     <SwitchIsLoginButton onPress={() => setIsLogin(!isLogin)}>
                         <IsLoginLabel>
                         {
@@ -102,6 +127,34 @@ const StartScreen = ({navigation}: any) =>  {
                     </SwitchIsLoginButton>
                 </ModalForm>
             </PrincipalContainer>
+            {resetPassword &&
+                <PromptMainContainer>
+                    <PromptContainer>
+                        <PromptButtonsContainer>
+                            <CloseButton onPress={() => setResetPassword(false)} >
+                                <CloseButtonImage source={require('../../Assets/close-line.png')}/>
+                            </CloseButton>
+                            <SubmitButton onPress={() => {
+
+                            }}>
+                                <SubmitButtonText>
+                                    Redefinir
+                                </SubmitButtonText>
+                            </SubmitButton>
+                        </PromptButtonsContainer>
+                        <PromptFormContainer>
+                            <PromptFormMenssage>
+                                Seu E-mail:
+                            </PromptFormMenssage>
+                            <PromptFormInputName onChangeText={value => setEmail(value)} />
+                            <PromptFormMenssage>
+                                Nova senha:
+                            </PromptFormMenssage>
+                            <PromptFormInputName onChangeText={value => setNewPassword(value)}/>
+                        </PromptFormContainer>
+                    </PromptContainer>
+                </PromptMainContainer>
+            }
         </MainContainer>
     );
     

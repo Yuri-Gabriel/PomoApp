@@ -54,6 +54,7 @@ const App = () => {
           name="Profile"
           component={Profile}
           options={{
+            title: "Perfil",
             headerStyle: {
               backgroundColor: Colors.Azul_Claro,
             },

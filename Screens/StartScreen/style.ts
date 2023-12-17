@@ -86,5 +86,15 @@ export const IsLoginLabel = styled.Text`
 `;
 
 export const SwitchIsLoginButton = styled.TouchableOpacity`
+  margin: 10px;
+`;
+
+export const ResetPasswordButton = styled.TouchableOpacity`
   margin-top: 10px;
+`;
+
+export const ResetPasswordButtonText = styled.Text`
+  font-size: 20px;
+  color: #FFFFFF;
+  font-weight: bold;
 `;
