@@ -18,29 +18,16 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
     private username: string;
     private email: string;
-    private iconUser: string;
+    private userID: number;
 
     constructor(props: ProfileProps) {
         super(props);
 
         this.username = this.props.route.params.username;
         this.email = this.props.route.params.email;
-        this.iconUser = this.props.route.params.iconUser;
+        this.userID = this.props.route.params.userID;
         this.state = {
-            PreDefinitions: [
-                {name: 'Estudar'},
-                {name: 'Trabalho'},
-                {name: 'Estudar'},
-                {name: 'Trabalho'},
-                {name: 'Estudar'},
-                {name: 'Trabalho'},
-                {name: 'Estudar'},
-                {name: 'Trabalho'},
-                {name: 'Estudar'},
-                {name: 'Trabalho'},
-                {name: 'Estudar'},
-                {name: 'Trabalho'},
-            ]
+            PreDefinitions: this.props.route.params.timers
         }
     }
 
@@ -48,7 +35,6 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
         return (
             <Container>
-                <IconUser source={require('../../Assets/userIcon.png')}/>
                 <UserTextInfo>
                     {this.username}
                 </UserTextInfo>
@@ -59,9 +45,22 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
                     {this.state.PreDefinitions?
                         <SlideBar scrollEnabled>
                             {this.state.PreDefinitions.map((value, key) =>
-                                <PreDefinitionButton>
+                                <PreDefinitionButton onPress={() => {
+                                    this.props.navigation.reset({
+                                        routes: [{
+                                            name: "SetTimer",
+                                            params: {
+                                                username: this.username,
+                                                workTime: value.forwork,
+                                                numberOfSessions: value.sessions,
+                                                pauseTime: value.forpause,
+                                                userID: this.userID,
+                                            }
+                                        }]
+                                    })
+                                }}>
                                     <PreDefinitionButtonText>
-                                        {value.name}
+                                        {value.timer_name}
                                     </PreDefinitionButtonText>
                                 </PreDefinitionButton>
                             )}

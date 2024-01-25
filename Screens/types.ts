@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteProp } from "@react-navigation/native";
-
+import { Timer } from '../Api/entitys';
 export interface ContadorProps {
     route: RouteProp<{ 
         params: { 
@@ -24,9 +24,13 @@ export  interface ContadorState {
 export interface SetTimerProps {
     route: RouteProp<{ 
         params: { 
+            userID: number,
             username: string,
             email: string,
-            iconUser: any,
+            timers: Timer[],
+            workTime: number,
+            numberOfSessions: number,
+            pauseTime: number,
         } 
     }, 'params'>,
     navigation: any
@@ -48,18 +52,17 @@ export interface ProfileProps {
         params: {
             username: string,
             email: string,
-            iconUser: any,
+            timers: Timer[],
+            userID: number
         }
     }, 'params'>,
     navigation: any
 }
 
-interface PreDefinitionsObject {
-    name: string
-}
+
 
 export interface ProfileState {
-    PreDefinitions: Array<PreDefinitionsObject>
+    PreDefinitions: Array<Timer>
 }
 
 export type RootStackParamList = {

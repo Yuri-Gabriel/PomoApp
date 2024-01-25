@@ -35,34 +35,40 @@ import {
     SetTimerState
 } from '../types';
 
+import { Timer } from "../../Api/entitys";
+
+import Conn from '../../Api/conection';
+
 class SetTimer extends React.Component<SetTimerProps, SetTimerState> {
 
     private username: string;
     private email: string;
-    private iconUser: string;
-    private img: any;
+    private userID: number;
+    private timers: Timer[];
 
     constructor(props: SetTimerProps) {
         super(props);
 
-        this.username = "Yuri" //this.props.route.params.username;
-        this.email = "yuri1234@gmail.com" //this.props.route.params.email;
-        this.iconUser = "" //this.props.route.params.iconUser;
-
+        this.username = this.props.route.params.username;
+        this.email = this.props.route.params.email;
+        this.timers = this.props.route.params.timers;
+        this.userID = this.props.route.params.userID,
+        console.log("constructor")
         this.state = {
-            workTime: 25,
-            numberOfSessions: 5,
-            pauseTime: 3,
+            workTime: this.props.route.params.workTime || 25,
+            numberOfSessions: this.props.route.params.numberOfSessions || 5,
+            pauseTime: this.props.route.params.pauseTime || 3,
             promptShow: false,
             pressetName: "",
             workTimePresset: "25",
             pauseTimePresset: "3",
             numberOfSessiosPresset: "5"
         }
+        console.log(this.userID);
         
     }
 
-    setWorkTime(value: number) {
+    setWorkTime(value: number) { 
         if(value > 0 && value < 100) {
             this.setState({ workTime: value });
             this.setState({ workTimePresset: `${value}` });
@@ -84,7 +90,7 @@ class SetTimer extends React.Component<SetTimerProps, SetTimerState> {
         }
     }
     
-    SavePresset() {
+    async SavePresset() {
         if (this.state.numberOfSessiosPresset == "" ||
             this.state.pauseTimePresset == "" ||
             this.state.workTimePresset == "" ||
@@ -92,6 +98,13 @@ class SetTimer extends React.Component<SetTimerProps, SetTimerState> {
                 alert("Erro");
                 this.setState({ promptShow: false });
         }
+        await Conn.createTimer({
+            forpause: parseInt(this.state.pauseTimePresset),
+            forwork: parseInt(this.state.workTimePresset),
+            sessions: parseInt(this.state.numberOfSessiosPresset),
+            timer_name: this.state.pressetName,
+            user_id: this.userID
+        })
         /**
          * Pegar o nome do presset, tempo de trabalho, de descanço e n° de sessões 
          * Enviar para a API
@@ -114,10 +127,10 @@ class SetTimer extends React.Component<SetTimerProps, SetTimerState> {
                         this.props.navigation.navigate("Profile", {
                             username: this.username,
                             email: this.email,
-                            iconUser: this.iconUser
+                            timers: this.timers,
+                            userID: this.userID
                         });
                     }}>
-                    <IconUser source={require('../../Assets/userIcon.png')}/>
                     <Title>
                         {this.username}
                     </Title>

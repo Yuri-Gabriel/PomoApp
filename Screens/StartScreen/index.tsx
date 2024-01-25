@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
     MainContainer,
@@ -31,33 +31,63 @@ import {
     SubmitButtonText
 } from '../Components/Form/style';
 
+import Conn from '../../Api/conection';
+
+import Axios from 'axios';
 
 const StartScreen = ({navigation}: any) =>  {
-
     const [email, setEmail] = useState<string>("yuri1234@gmail.com");
-    const [password, setPassword] = useState<string>("");
-    const [username, setUsername] = useState<string>("Yuri");
+    const [password, setPassword] = useState<string>("yuri1234");
+    const [username, setUsername] = useState<string>("");
 
     const [newPassword, setNewPassword] = useState<string>("");
-
-    const iconUser = '../../Assets/userIcon.png';
 
     const [isLogin, setIsLogin] = useState<boolean>(false);
     const [resetPassword, setResetPassword] = useState<boolean>(false);
 
-    const CheckLogin = () => {
-        if(true) {
-            navigation.reset({
-                routes: [{
-                    name: 'SetTimer',
-                    params: {
-                        username: username,
-                        email: email,
-                        iconUser: iconUser
-                    }
-                }],
-            });
+    
+    const SingUp = async () => {
+        if(email == "" || password == "" || username == "") {
+            alert("Credenciais");
+            return;
         }
+
+        //
+
+        await Conn.SingUpUser({
+            username: username,
+            useremails: email,
+            userpassword: password
+        })
+    }
+
+    const CheckLogin = async () => {
+
+        if(email == "" || password == "") {
+            alert("Credenciais");
+            return;
+        }
+
+        const user = await Conn.LoginUser({
+            useremails: email.toLowerCase(),
+            userpassword: password
+        });
+
+        console.log("kjahsk")
+
+        if (user.statusCode == 404) return;
+
+        navigation.reset({
+            routes: [{
+                name: 'SetTimer',
+                params: {
+                    userID: user.user_id,
+                    username: user.username,
+                    email: user.useremails,
+                    timers: user.timers
+                }
+            }],
+        });
     }
 
     const ResetPassword = () => {
@@ -98,12 +128,8 @@ const StartScreen = ({navigation}: any) =>  {
                         if(isLogin) {
                             CheckLogin();
                         } else {
-                            
-                            setEmail("");
-                            setPassword("");
-                            setIsLogin(true);
+                            SingUp();
                             alert("Conta criada com sucesso")
-                            
                         }
                     }}>
                         <ButtonSubmitText>
@@ -120,7 +146,7 @@ const StartScreen = ({navigation}: any) =>  {
                     <SwitchIsLoginButton onPress={() => setIsLogin(!isLogin)}>
                         <IsLoginLabel>
                         {
-                            isLogin?"Já possui conta? ":"Não possui conta? "
+                            isLogin?"Não possui conta? ":"Já possui conta?"
                         }
                         Clique aqui!
                         </IsLoginLabel>
