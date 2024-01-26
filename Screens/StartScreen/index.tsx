@@ -38,7 +38,7 @@ import Axios from 'axios';
 const StartScreen = ({navigation}: any) =>  {
     const [email, setEmail] = useState<string>("yuri1234@gmail.com");
     const [password, setPassword] = useState<string>("yuri1234");
-    const [username, setUsername] = useState<string>("");
+    const [username, setUsername] = useState<string>("yuri");
 
     const [newPassword, setNewPassword] = useState<string>("");
 
@@ -52,13 +52,13 @@ const StartScreen = ({navigation}: any) =>  {
             return;
         }
 
-        //
-
-        await Conn.SingUpUser({
+        const singup: any = await Conn.SingUpUser({
             username: username,
             useremails: email,
             userpassword: password
-        })
+        });
+
+        alert("Conta criada com sucesso");
     }
 
     const CheckLogin = async () => {
@@ -75,8 +75,6 @@ const StartScreen = ({navigation}: any) =>  {
 
         console.log("kjahsk")
 
-        if (user.statusCode == 404) return;
-
         navigation.reset({
             routes: [{
                 name: 'SetTimer',
@@ -84,6 +82,7 @@ const StartScreen = ({navigation}: any) =>  {
                     userID: user.user_id,
                     username: user.username,
                     email: user.useremails,
+                    password: user.userpassword,
                     timers: user.timers
                 }
             }],
@@ -129,7 +128,7 @@ const StartScreen = ({navigation}: any) =>  {
                             CheckLogin();
                         } else {
                             SingUp();
-                            alert("Conta criada com sucesso")
+                            
                         }
                     }}>
                         <ButtonSubmitText>

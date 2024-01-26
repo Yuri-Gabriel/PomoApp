@@ -27,6 +27,7 @@ export interface SetTimerProps {
             userID: number,
             username: string,
             email: string,
+            password: string,
             timers: Timer[],
             workTime: number,
             numberOfSessions: number,
@@ -52,6 +53,7 @@ export interface ProfileProps {
         params: {
             username: string,
             email: string,
+            password: string,
             timers: Timer[],
             userID: number
         }
@@ -62,8 +64,19 @@ export interface ProfileProps {
 
 
 export interface ProfileState {
-    PreDefinitions: Array<Timer>
+    PreDefinitions: Array<Timer>,
+    showPrompt: boolean,
+    timer_ID_delete: number,
+    timer_Name_delete: string
 }
+
+export interface DeleteTimerProps {
+    func_close: Function,
+    func_deletar: Function,
+    timer_name: string
+}
+
+export interface DeleteTimerState {}
 
 export type RootStackParamList = {
     SetTimer: React.ComponentClass<SetTimerProps, SetTimerState>;

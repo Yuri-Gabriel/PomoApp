@@ -6,6 +6,7 @@ export interface Timer {
     sessions: number;
     timer_name: string;
     user_id: number;
+    timer_id: number;
 }
 
 export interface User {

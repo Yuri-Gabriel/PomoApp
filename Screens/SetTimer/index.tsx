@@ -43,6 +43,7 @@ class SetTimer extends React.Component<SetTimerProps, SetTimerState> {
 
     private username: string;
     private email: string;
+    private password: string;
     private userID: number;
     private timers: Timer[];
 
@@ -51,9 +52,10 @@ class SetTimer extends React.Component<SetTimerProps, SetTimerState> {
 
         this.username = this.props.route.params.username;
         this.email = this.props.route.params.email;
+        this.password = this.props.route.params.password;
         this.timers = this.props.route.params.timers;
         this.userID = this.props.route.params.userID,
-        console.log("constructor")
+
         this.state = {
             workTime: this.props.route.params.workTime || 25,
             numberOfSessions: this.props.route.params.numberOfSessions || 5,
@@ -64,8 +66,6 @@ class SetTimer extends React.Component<SetTimerProps, SetTimerState> {
             pauseTimePresset: "3",
             numberOfSessiosPresset: "5"
         }
-        console.log(this.userID);
-        
     }
 
     setWorkTime(value: number) { 
@@ -104,7 +104,9 @@ class SetTimer extends React.Component<SetTimerProps, SetTimerState> {
             sessions: parseInt(this.state.numberOfSessiosPresset),
             timer_name: this.state.pressetName,
             user_id: this.userID
-        })
+        });
+
+        alert("Timer criado");
         /**
          * Pegar o nome do presset, tempo de trabalho, de descanço e n° de sessões 
          * Enviar para a API
